@@ -12,7 +12,7 @@
         console.log('\t1. An object. To create an empty board of size n:\n\t\t{n: %c<num>%c} - Where %c<num> %cis the dimension of the (empty) board you wish to instantiate\n\t\t%cEXAMPLE: var board = new Board({n:5})', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: grey;');
         console.log('\t2. An array of arrays (a matrix). To create a populated board of size n:\n\t\t[ [%c<val>%c,%c<val>%c,%c<val>%c...], [%c<val>%c,%c<val>%c,%c<val>%c...], [%c<val>%c,%c<val>%c,%c<val>%c...] ] - Where each %c<val>%c is whatever value you want at that location on the board\n\t\t%cEXAMPLE: var board = new Board([[1,0,0],[0,1,0],[0,0,1]])', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: grey;');
       } else if (params.hasOwnProperty('n')) {
-        this.set(makeEmptyMatrix(this.get('n')));
+        this.set( makeEmptyMatrix(this.size()) );
       } else {
         this.set('n', params.length);
       }
@@ -74,17 +74,29 @@
     =                 TODO: fill in these Helper Functions                    =
     =========================================================================*/
 
+    // just for convenience
+    size: function() {
+      return this.get('n');
+    },
+
     // ROWS - run from left to right
     // --------------------------------------------------------------
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      return _.reduce(this.get(rowIndex), (acc, elem) => acc + elem, 0) > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      for (let i = 0; i < this.size(); i++) {
+        if (this.hasRowConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
+      // var x = this;
+      // return !_.every( _.range(x.get('n')), this.hasRowConflictAt.bind(x) );
     },
 
 
@@ -94,12 +106,23 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var count = 0;
+      for (let i = 0; i < this.size(); i++) {
+        if (this.get(i)[colIndex]) {
+          count++;
+        }
+      }
+      return count > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      for (let i = 0; i < this.size(); i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -109,12 +132,41 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var count = 0;
+      var column = majorDiagonalColumnIndexAtFirstRow;
+      var board = this.rows();
+      for (var i = 0; i < board.length; i++) {
+        var diagonal = board[i][column + i];
+        if (diagonal) {
+          count += diagonal;
+          console.log('count', count);
+        }
+      }
+      return count > 1;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      // var arr = [];
+      // for (let i = 0; i < this.size(); i++) {
+      //   arr = arr.concat( this.get(i) );
+      // }
+      // var firstIndex = arr.indexOf(1);
+      // if (firstIndex > -1) {
+      //   for ( let i = firstIndex + this.size() + 1; i < arr.length; i += this.size() + 1 ) {
+      //     if (arr[i]) {
+      //       return true;
+      //     }
+      //   }
+      // }
+      // return false;
+
+      for (let i = 0; i < this.size(); i++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -129,7 +181,19 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var arr = [];
+      for (let i = 0; i < this.size(); i++) {
+        arr = arr.concat( this.get(i) );
+      }
+      var firstIndex = arr.indexOf(1);
+      if (firstIndex > -1) {
+        for ( let i = firstIndex + this.size() - 1; i < arr.length; i += this.size() - 1 ) {
+          if (arr[i]) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
