@@ -221,7 +221,7 @@
           count++;
         }
         column--;
-        console.log("column", column);
+        //console.log("column", column);
       }
 
       // var count2 = 0;
@@ -240,7 +240,7 @@
       return count > 1;
     },
 
-    // test if any minor diagonals on this board contain conflicts
+    // test if any minor d`iagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       // var arr = [];
       // for (let i = 0; i < this.size(); i++) {
