@@ -192,13 +192,14 @@
       // }
       // return false;
 
-      for (var i = 0; i < this.size(); i++) {
-        for (var j = 0; j < this.size(); j++) {
-          var nathan = this._getFirstRowColumnIndexForMajorDiagonalOn(i, j);
-          if (this.hasMajorDiagonalConflictAt(nathan)) {
-            return true;
-          }
+      // for (var i = 0; i < this.size(); i++) {
+      //   for (var j = 0; j < this.size(); j++) {
+      // var nathan = this._getFirstRowColumnIndexForMajorDiagonalOn(i, j);
+      for (let nathan = this.size(); nathan > 1 - this.size(); nathan--) {
+        if (this.hasMajorDiagonalConflictAt(nathan)) {
+          return true;
         }
+        // }
       }
       return false;
     },
@@ -284,14 +285,18 @@
       //   }
       // }
       // return false;
-      for (var i = 0; i < this.size(); i++) {
-        for (var j = 0; j < this.size(); j++) {
-          var nathan = this._getFirstRowColumnIndexForMinorDiagonalOn(i, j);
-          if (this.hasMinorDiagonalConflictAt(nathan)) {
-            return true;
-          }
+      // for (var i = 0; i < this.size(); i++) {
+      //   for (var j = 0; j < this.size(); j++) {
+      //var nathan = this._getFirstRowColumnIndexForMinorDiagonalOn(i, j);
+
+      for (let nathan = 0; nathan < 2 * this.size() - 1; nathan++) {
+        if (this.hasMinorDiagonalConflictAt(nathan)) {
+          return true;
         }
       }
+
+      //   }
+      // }
       return false;
     }
     /*--------------------  End of Helper Functions  ---------------------*/
